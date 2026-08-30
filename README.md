@@ -9,7 +9,7 @@ If a search does not yield a specific item listing, the store does not ever stoc
 ---
 
 ## Screenshots
-
+<img width="700" height="614" alt="image" src="https://github.com/user-attachments/assets/52d1b613-3f9c-49fa-afb2-435e2da6b19b" />
 
 ---
 
