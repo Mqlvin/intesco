@@ -1,0 +1,42 @@
+@font-face {
+    font-family: "Tesco Modern";
+    src: url('https://www.tesco.com/fonts/TESCOModern-Bold.woff2') format('woff2');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Tesco Modern";
+    src: url('https://www.tesco.com/fonts/TESCOModern-Regular.woff2') format('woff2');
+    font-weight: 300;
+}
+
+input {
+    outline: none;
+    border: none;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+
+    background-color: #fafafa;
+    font-family: "Tesco Modern";
+}
+
+#app {
+    display: flex;
+    justify-content: center;
+
+}
+
+#pageContainer {
+    max-width: 1300px;
+    width: 100%;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
