@@ -25,13 +25,16 @@
 
     function getAisles(productLocation: any): string[] {
         if(productLocation && productLocation.length == 0) return ["Unknown"];
-        return Array.from(new Set(productLocation.map((p) => { return `${p.aisle} (${p.aisleOrientation})` })))
+        return Array.from(new Set(productLocation.map((p) => { return `${p.aisle} (${p.aisleOrientation}), ${parseInt(p.moduleNumber)} along, ${p.productPosition} up` })))
+    }
+    function getShelfPosition(productLocation: any): string { // get first shelf position only
+        if(productLocation && productLocation.length == 0) return "Unknown";
+        return `${parseInt(productLocation[0].moduleNumber)} along, ${productLocation[0].productPosition} up`;
     }
 
     const stockIndicator = mapStockStatus(itemData.availability.status, itemData.availability.quantity);
     const aisles = getAisles(itemData.productLocation);
-
-    console.log(itemData.productLocation)
+    const shelfPosition = getShelfPosition(itemData.productLocation);
 </script>
 
 <div id="container">
@@ -42,6 +45,9 @@
         <div id="item-location">
             <span style="font-weight: 300;">Aisle{aisles.length > 1 ? "s" : ""}:</span>
             <span style="font-weight: 600;">{aisles.join(", ")}</span>
+            <br>
+            <span style="font-weight: 300;">Shelf:</span>
+            <span style="font-weight: 600;">{shelfPosition}</span>
         </div>
         {#if itemData.promotions && itemData.promotions.length != 0}
             <ClubcardPricing promotionObj={itemData.promotions} originalPrice={itemData.price.actual} />
