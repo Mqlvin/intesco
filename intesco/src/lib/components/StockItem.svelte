@@ -30,7 +30,6 @@
 
     const stockIndicator = mapStockStatus(itemData.availability.status, itemData.availability.quantity);
     const aisles = getAisles(itemData.productLocation);
-
 </script>
 
 <div id="container">
@@ -120,6 +119,7 @@
         justify-content: center;
 
         border-radius: 100px;
+        user-select: none;
     }
     #item-availability {
         margin: 0;
@@ -133,6 +133,6 @@
     #item-location {
         font-size: 0.9em;
         opacity: 0.7;
-    }
+    }   
 
 </style>
