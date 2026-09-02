@@ -8,7 +8,6 @@ export function getStore(): string | undefined {
     }
 
     let cookies = decodedCookie.split(";");
-    console.log(cookies)
     for(const c in cookies) {
         if(cookies[c].startsWith(cnameStore)) {
             return cookies[c].substring(cnameStore.length + 1); // + 1 removes =
@@ -25,8 +24,6 @@ export function setStore(name: string, uuid: string) {
     let cvalue = `${name}:${uuid}`;
 
     document.cookie = `${cnameStore}=${cvalue};${cexpires}`;
-
-    console.log(`Selected ${name} with UUID:${uuid}`);
 }
 
 export function clearStore() {

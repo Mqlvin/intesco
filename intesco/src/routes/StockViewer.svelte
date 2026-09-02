@@ -59,8 +59,6 @@
         searchTerm = searchTerm.startsWith("www.tesco.com") ? searchTerm.substring(4) : searchTerm
         // now starts with tesco.com/dotdotdot
 
-        console.log(searchTerm)
-
         if(searchTerm == "") {
             lookupRequest = "Search for an item";
         } else if(searchTerm.startsWith("tesco.com/shop/en-GB/products/")) {

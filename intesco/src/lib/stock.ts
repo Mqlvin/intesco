@@ -75,8 +75,6 @@ export async function getItemName(tpnc: string): Promise<[string, boolean]> {
             body: JSON.stringify({ tpnc }),
         });
 
-        console.log(response)
-
         if(!response.ok) {
             return [`Tesco item name request HTTP failed, code ${response.status}`, false];
         }
