@@ -2,6 +2,11 @@
     import { type TescoItem } from "../stock";
     import ClubcardPricing from "./ClubcardPricing.svelte";
 
+    import { onMount } from "svelte";
+    import tippy from "tippy.js";
+    import "tippy.js/dist/tippy.css";
+    import "tippy.js/themes/light.css";
+
     export let itemData: TescoItem;
 
     // maps stock status + quantity to indicator text + hex colour etc "#000000"
@@ -25,16 +30,42 @@
 
     function getAisles(productLocation: any): string[] {
         if(productLocation && productLocation.length == 0) return ["Unknown"];
-        return Array.from(new Set(productLocation.map((p) => { return `${p.aisle} (${p.aisleOrientation})` })))
+        return Array.from(new Set(productLocation.map((p) => { return `Aisle ${p.aisle} (${p.aisleOrientation})` })))
     }
-    function getShelfPosition(productLocation: any): string { // get first shelf position only
-        if(productLocation && productLocation.length == 0) return "Unknown";
-        return `${parseInt(productLocation[0].moduleNumber)} along, ${productLocation[0].productPosition} up`;
+    function getLocations(productLocation: any): string[] { // get first shelf position only
+        let locations: Set<string> = new Set();
+
+        for(const idx in productLocation) {
+            const name = `Aisle ${productLocation[idx].aisle} (${productLocation[idx].aisleOrientation})`;
+            locations.add(`${name} - Shelf ${productLocation[idx].shelfNumber}</b>, ${productLocation[idx].productPosition} up`);
+        }
+
+        return Array.from(locations);
     }
 
     const stockIndicator = mapStockStatus(itemData.availability.status, itemData.availability.quantity);
     const aisles = getAisles(itemData.productLocation);
-    const shelfPosition = getShelfPosition(itemData.productLocation);
+    const locations = getLocations(itemData.productLocation);
+
+    let locationElement: HTMLElement;
+    onMount(() => {
+        tippy(locationElement, {
+            content: `
+<div class="location-popup">
+    <p style="font-size: 1.2em; font-weight: 300; color: #666;" class="popup-text">${locations.length > 1 ? "All locations:" : "Location:"}</p>
+    <p class="popup-text" style="font-size: 1.1em; font-weight: 600; color: #333; border-left: 2px solid #ddd; padding-left: 8px; margin-top: 8px;">
+        <b>${locations.join("<br>")}</b>
+    </p>
+</div>
+            `,
+            allowHTML: true,
+            placement: "top-start",
+            duration: [150, 250],
+            theme: "light",
+            trigger: "click",
+            interactive: true
+        });
+    });
 </script>
 
 <div id="container">
@@ -42,12 +73,14 @@
     <img id="item-image" src={itemData.defaultImageUrl} alt="The associated Tesco product" />
     <div id="meta-container">
         <a target="_blank" id="item-link" href="https://www.tesco.com/shop/en-GB/products/{itemData.id}">{itemData.title}</a>
-        <div id="item-location">
-            <span style="font-weight: 300;">Aisle{aisles.length > 1 ? "s" : ""}:</span>
+        <div id="item-location" bind:this={locationElement}>
+            <span style="font-weight: 300;">Location{aisles.length > 1 ? "s" : ""}:</span>
             <span style="font-weight: 600;">{aisles.join(", ")}</span>
-            <br>
-            <span style="font-weight: 300;">Shelf:</span>
-            <span style="font-weight: 600;">{shelfPosition}</span>
+
+            <svg style="margin: 0; padding: 0; transform: translateY(1px);" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path fill="currentColor" d="M12 22c5.51 0 10-4.49 10-10S17.51 2 12 2S2 6.49 2 12s4.49 10 10 10M11 7h2v2h-2zm0 4h2v6h-2z" />
+            </svg>
         </div>
         {#if itemData.promotions && itemData.promotions.length != 0}
             <ClubcardPricing promotionObj={itemData.promotions} originalPrice={itemData.price.actual} />
@@ -141,6 +174,22 @@
     #item-location {
         font-size: 0.9em;
         opacity: 0.7;
+        cursor: pointer;
+
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    :global(.location-popup) {
+        max-height: 200px;
+        overflow-y: auto;
+
+        padding: 12px;
+    }
+
+    :global(p.popup-text) {
+        margin: 0;
+        padding: 0;
     }
 
 </style>
