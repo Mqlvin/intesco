@@ -25,7 +25,7 @@
 
     function getAisles(productLocation: any): string[] {
         if(productLocation && productLocation.length == 0) return ["Unknown"];
-        return Array.from(new Set(productLocation.map((p) => { return `${p.aisle} (${p.aisleOrientation}), ${parseInt(p.moduleNumber)} along, ${p.productPosition} up` })))
+        return Array.from(new Set(productLocation.map((p) => { return `${p.aisle} (${p.aisleOrientation})` })))
     }
     function getShelfPosition(productLocation: any): string { // get first shelf position only
         if(productLocation && productLocation.length == 0) return "Unknown";
