@@ -47,6 +47,7 @@ pub fn get_api_router() -> Router {
                     let latitude = match latitude.parse::<f64>() {
                         Ok(value) => value,
                         Err(error) => {
+                        eprintln!("Argument parse error: {}", error.to_string());
                             return Json(Response::err(error.to_string()));
                         }
                     };
@@ -54,6 +55,7 @@ pub fn get_api_router() -> Router {
                     let longitude = match longitude.parse::<f64>() {
                         Ok(value) => value,
                         Err(error) => {
+                            eprintln!("Argument parse error: {}", error.to_string());
                             return Json(Response::err(error.to_string()));
                         }
                     };
@@ -61,6 +63,7 @@ pub fn get_api_router() -> Router {
                     let store_locator = match get_nearby_stores(latitude, longitude).await {
                         Ok(value) => value,
                         Err(error) => {
+                            eprintln!("Store locator API failed: {}", error.to_string());
                             return Json(Response::err(error));
                         }
                     };
@@ -72,13 +75,19 @@ pub fn get_api_router() -> Router {
         .route("/stock", post(|Json(params): Json<StockLookupParams>| async move {
             match get_stock(params).await {
                 Ok(stock_result) => Json(Response::ok(stock_result)),
-                Err(err) => Json(Response::err(err))
+                Err(err) => {
+                    eprintln!("Stock lookup failed: {}", err.to_string());
+                    Json(Response::err(err))
+                }
             }
         }))
         .route("/name", post(|Json(params): Json<NameLookupParams>| async move {
             match get_item_name(params).await {
                 Ok(stock_result) => Json(Response::ok(stock_result)),
-                Err(err) => Json(Response::err(err))
+                Err(err) => {
+                    eprintln!("Name lookup failed: {}", err.to_string());
+                    Json(Response::err(err))
+                }
             }
         }))
 }
