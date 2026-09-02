@@ -32,6 +32,11 @@ pub async fn get_stock(params: StockLookupParams) -> Result<Value, String> {
             "config": {
                 "variant": "default"
             },
+            "storeProductOptions": {
+                "page": 1,
+                "count": 10, // change to get more nearby stores with product, ill just show one
+                "conditions": ["SHOW_WHEN_UNAVAILABLE"],
+            },
             "includeProductAvailability": true,
             "includeProductLocation": true,
             "channel": "INSTORE"
@@ -129,6 +134,7 @@ const SEARCH_QUERY: &str= "
         $page: Int
         $count: Int
         $config: BrowseSearchConfig
+        $storeProductOptions: storeProductStockArgType
         $includeProductAvailability: Boolean = false
         $includeProductLocation: Boolean = false
         $channel: ChannelType
@@ -168,12 +174,26 @@ const SEARCH_QUERY: &str= "
             ... on StoreProductLocationType {
                 aisleOrientation
                 aisle
+                moduleNumber
+                shelfNumber
+                productPosition
             }
         }
         availability @include(if: $includeProductAvailability) {
             ... on SelectedStoreProductAvailabilityType {
                 status
                 quantity
+                location(storeProductOptions: $storeProductOptions) {
+                    stores {
+                        storeInformation {
+                            ... Stores
+                        }
+                        availability {
+                            status
+                            quantity
+                        }
+                    }
+                }
             }
         }
         price {
@@ -203,7 +223,46 @@ const SEARCH_QUERY: &str= "
             }
             unitSellingInfo
         }
-}";
+    }
+    fragment Stores on StoreLocationType {
+        locationUuid
+        distance
+        distanceUnit
+        latitude
+        longitude
+        address {
+            name
+        }
+        openingHours {
+            mo {
+                ...StoreHours
+            }
+            tu {
+                ...StoreHours
+            }
+            we {
+                ... StoreHours
+            }
+            th {
+                ... StoreHours
+            }
+            fr {
+                ... StoreHours
+            }
+            sa {
+                ... StoreHours
+            }
+            su {
+                ...StoreHours
+            }
+        }
+    }
+    fragment StoreHours on HoursForDayType {
+        isOpen
+        open
+        close
+    }
+";
 
 const ITEM_NAME_QUERY: &str = "
     query GetProductMultiseller(
