@@ -3,7 +3,7 @@
     import StockItem from "../lib/components/StockItem.svelte";
     import { clearStore } from "../lib/cookies";
 
-    const LOOKUP_SIZE: number = 18; // 50 items at a time
+    const LOOKUP_SIZE: number = 20; // 20 items at a time
 
     export let cookie: string;
     const storeName = cookie.split(":")[0];
