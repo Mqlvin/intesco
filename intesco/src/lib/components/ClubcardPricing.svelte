@@ -31,6 +31,9 @@
             {/if}
         </div>
     </div>
+    <div id="deal-ends">
+        <p>Offer valid until {formatEndDate(promotion.endDate)}</p>
+    </div>
 {/if}
 
 <style>
@@ -46,7 +49,7 @@
         border-radius: 12px;
         overflow: hidden;
 
-        margin: 10px 0px 10px 0px;
+        margin: 10px 0px 0px 0px;
     }
 
     #clubcard-text {
@@ -82,5 +85,14 @@
         font-size: 0.75em;
         color: #333;
         line-height: 1em;
+    }
+
+    #deal-ends {
+        font-size: 0.75em;
+        color: #333;
+        text-align: left;
+        width: 100%;
+
+        margin: -6px 0px 7px 0px;
     }
 </style>
