@@ -122,7 +122,10 @@
         background: #ccc;
         gap: 1px;
         border: 1px solid #ccc;
-        border-radius: 3px
+        border-radius: 3px;
+
+        box-shadow:
+  0px 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     #load-more {
@@ -137,6 +140,7 @@
     }
     #load-more-button {
         background-color: #00539f;
+        border: none;
         border-radius: 100px;
         width: 50%;
         height: 42px;
