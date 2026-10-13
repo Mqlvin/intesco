@@ -37,7 +37,7 @@
 
         for(const idx in productLocation) {
             const name = `Aisle ${productLocation[idx].aisle} (${productLocation[idx].aisleOrientation})`;
-            locations.add(`${name} - Shelf ${productLocation[idx].shelfNumber}</b>, ${productLocation[idx].productPosition} up`);
+            locations.add(`${name} - Module ${productLocation[idx].moduleNumber}, ${productLocation[idx].productPosition} up`);
         }
 
         return Array.from(locations);
@@ -113,6 +113,8 @@
         display: inline;
         max-height: 285px;
         max-width: 228px;
+
+        min-height: 225px;
     }
 
     #meta-container {
@@ -161,6 +163,8 @@
 
         border-radius: 100px;
         user-select: none;
+
+        box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
     #item-availability {
         margin: 0;
